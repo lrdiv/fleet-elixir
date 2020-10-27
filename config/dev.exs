@@ -2,10 +2,9 @@ use Mix.Config
 
 # Configure your database
 config :fleet, Fleet.Repo,
-  username: "postgres",
-  password: "postgres",
-  database: "fleet_dev",
-  hostname: "localhost",
+  username: "fleetdb",
+  password: "fleetdb",
+  database: "fleetdb",
   show_sensitive_data_on_connection_error: true,
   pool_size: 10
 
@@ -20,15 +19,7 @@ config :fleet, FleetWeb.Endpoint,
   debug_errors: true,
   code_reloader: true,
   check_origin: false,
-  watchers: [
-    node: [
-      "node_modules/webpack/bin/webpack.js",
-      "--mode",
-      "development",
-      "--watch-stdin",
-      cd: Path.expand("../assets", __DIR__)
-    ]
-  ]
+  watchers: []
 
 # ## SSL Support
 #
@@ -74,3 +65,5 @@ config :phoenix, :stacktrace_depth, 20
 
 # Initialize plugs at runtime for faster development compilation
 config :phoenix, :plug_init_mode, :runtime
+
+import_config "dev.secret.exs"

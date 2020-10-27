@@ -10,13 +10,22 @@ defmodule FleetWeb.Router do
   end
 
   pipeline :api do
-    plug :accepts, ["json"]
+    plug :accepts, ["json-api"]
+    plug JSONAPI.Deserializer
   end
 
-  scope "/", FleetWeb do
-    pipe_through :browser
+  pipeline :auth do
+    plug FleetWeb.Authentication.Pipeline
+  end
 
-    get "/", PageController, :index
+  scope "/api", FleetWeb do
+    pipe_through :api
+
+    resources "/tokens", TokenController, only: [:create]
+  end
+
+  scope "/api", FleetWeb do
+    pipe_through [:api, :auth]
   end
 
   # Other scopes may use custom stacks.
