@@ -1,5 +1,15 @@
 # Fleet
 
+Configuration:
+  * Create a `docker/pgdata` directory to store docker postgres data
+  * Add Guardian config with secret key to `config/dev.secret.exs`
+
+```elixir
+config :fleet, Fleet.Accounts.Guardian,
+       issuer: "fleet",
+       secret_key: "Secret key. You can use `mix guardian.gen.secret` to get one"
+```
+
 To start your Phoenix server:
 
   * Install dependencies with `mix deps.get`
