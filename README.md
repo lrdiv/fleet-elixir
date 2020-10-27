@@ -10,7 +10,18 @@ config :fleet, Fleet.Accounts.Guardian,
        secret_key: "Secret key. You can use `mix guardian.gen.secret` to get one"
 ```
 
-To start your Phoenix server:
+To start docker-compose environment (recommended):
+
+  * Run `docker-compose up --build`
+  * Your database will be created and seeded with a `users` table
+  * Database will be accessible on port `54320`
+  * Run any future mix commands like so:
+
+```bash
+docker-compose run api mix ecto.migrate
+```
+
+To start your Phoenix server without docker:
 
   * Install dependencies with `mix deps.get`
   * Create and migrate your database with `mix ecto.setup`
