@@ -3,10 +3,12 @@ defmodule Fleet.Accounts.User do
   import Ecto.Changeset
 
   alias Argon2
+  alias Fleet.Tracking.Location
 
   schema "users" do
     field :password, :string
     field :username, :string
+    has_many :locations, Location
     timestamps()
   end
 

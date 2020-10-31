@@ -6,10 +6,10 @@ use Mix.Config
 # to provide built-in test partitioning in CI environment.
 # Run `mix help test` for more information.
 config :fleet, Fleet.Repo,
-  username: "postgres",
-  password: "postgres",
+  username: "fleetdb",
+  password: "fleetdb",
   database: "fleet_test#{System.get_env("MIX_TEST_PARTITION")}",
-  hostname: "localhost",
+  hostname: "db",
   pool: Ecto.Adapters.SQL.Sandbox
 
 # We don't run a server during test. If one is required,
@@ -17,6 +17,10 @@ config :fleet, Fleet.Repo,
 config :fleet, FleetWeb.Endpoint,
   http: [port: 4002],
   server: false
+
+ config :fleet, Fleet.Accounts.Guardian,
+  issuer: "fleet",
+  secret_key: "keepitlikeasecret"
 
 # Print only warnings and errors during test
 config :logger, level: :warn

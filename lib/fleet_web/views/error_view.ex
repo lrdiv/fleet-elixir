@@ -13,4 +13,15 @@ defmodule FleetWeb.ErrorView do
   def template_not_found(template, _assigns) do
     Phoenix.Controller.status_message_from_template(template)
   end
+
+  def render("error.json", options) do
+    error = %{"status" => options[:status], "title" => options[:title]}
+
+    case options[:detail] do
+      nil -> error
+      detail -> Map.put(error, "detail", detail)
+    end
+
+    %{"errors" => [error]}
+  end
 end

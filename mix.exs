@@ -48,7 +48,9 @@ defmodule Fleet.MixProject do
       {:plug_cowboy, "~> 2.0"},
       {:guardian, "~> 2.1.1"},
       {:argon2_elixir, "~> 2.0"},
-      {:jsonapi, "1.3.0"}
+      {:jsonapi, "1.3.0"},
+      {:geo, "~> 3.3.1"},
+      {:geo_postgis, "~> 3.3.1"}
     ]
   end
 
@@ -63,7 +65,10 @@ defmodule Fleet.MixProject do
       setup: ["deps.get", "ecto.setup"],
       "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
       "ecto.reset": ["ecto.drop", "ecto.setup"],
-      test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"]
+      test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"],
+      "db:migrate": ["mix ecto.migrate"],
+      "db:reset": ["mix ecto.reset"],
+      "db:drop": ["mix ecto.drop"]
     ]
   end
 end

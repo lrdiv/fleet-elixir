@@ -33,11 +33,19 @@ defmodule FleetWeb.ConnCase do
 
   setup tags do
     :ok = Ecto.Adapters.SQL.Sandbox.checkout(Fleet.Repo)
+    conn = Phoenix.ConnTest.build_conn()
 
     unless tags[:async] do
       Ecto.Adapters.SQL.Sandbox.mode(Fleet.Repo, {:shared, self()})
     end
 
-    {:ok, conn: Phoenix.ConnTest.build_conn()}
+    if tags[:auth] do
+      {:ok, current_user} = Fleet.Accounts.create_user(%{"username" => "user1@example.com", "password" => "password"})
+      {:ok, token, _claims} = Fleet.Accounts.Guardian.encode_and_sign(current_user)
+      conn = Plug.Conn.put_req_header(conn, "authorization", "Bearer #{token}")
+      {:ok, conn: conn, current_user: current_user}
+    else
+      {:ok, conn: conn}
+    end
   end
 end

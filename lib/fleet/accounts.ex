@@ -7,7 +7,7 @@ defmodule Fleet.Accounts do
   alias Fleet.Accounts.Guardian
   alias Argon2
 
-  def list_users, do: Repo.all(User)
+  def list_users(), do: Repo.all(User)
 
   def get_user!(id), do: Repo.get!(User, id)
 
@@ -29,25 +29,12 @@ defmodule Fleet.Accounts do
 
   def authenticate_user(username, plain_text_password) do
     query = from u in User, where: u.username == ^username
-    case Repo.one(query) do
-      nil ->
-        Argon2.no_user_verify()
-        {:error, :invalid_credentials}
-      user -> login_user(plain_text_password, user)
-    end
-  end
-
-  defp login_user(password, user) do
-    case Argon2.verify_pass(password, user.password) do
-      true -> generate_token(user)
-      false -> {:error, :invalid_credentials}
-    end
-  end
-
-  defp generate_token(user) do
-    case Guardian.encode_and_sign(user) do
-      {:ok, token, _claims} -> {:ok, token, user}
-      err -> {:error, err}
+    with %User{} = user <- Repo.one(query),
+         true <- Argon2.verify_pass(plain_text_password, user.password),
+         {:ok, token, _claims} <- Guardian.encode_and_sign(user) do
+      {:ok, token, user}
+    else
+      _err -> {:error, :invalid_credentials}
     end
   end
 end

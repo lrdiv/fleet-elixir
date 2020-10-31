@@ -1,9 +1,9 @@
 defmodule FleetWeb.TokenController do
   use FleetWeb, :controller
 
-  plug JSONAPI.QueryParser, view: FleetWeb.TokenView
-
   alias Fleet.Accounts
+
+  action_fallback FleetWeb.FallbackController
 
   def create(conn, %{"username" => username, "password" => password}) do
     with {:ok, token, user} <- Accounts.authenticate_user(username, password) do
@@ -12,5 +12,4 @@ defmodule FleetWeb.TokenController do
       |> render("show.json", %{data: %{token: token, user_id: user.id}})
     end
   end
-
 end
