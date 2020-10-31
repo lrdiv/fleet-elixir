@@ -10,6 +10,9 @@ use Mix.Config
 config :fleet,
   ecto_repos: [Fleet.Repo]
 
+config :fleet, Fleet.Repo,
+  types: Fleet.PostgresTypes
+
 # Configures the endpoint
 config :fleet, FleetWeb.Endpoint,
   url: [host: "localhost"],
@@ -30,7 +33,7 @@ config :jsonapi,
   namespace: "/api",
   json_library: Poison
 
-config :plug, :mimes, %{
+config :mime, :types, %{
   "application/vnd.api+json" => ["json-api"]
 }
 

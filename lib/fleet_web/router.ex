@@ -19,13 +19,20 @@ defmodule FleetWeb.Router do
   end
 
   scope "/api", FleetWeb do
-    pipe_through :api
-
     resources "/tokens", TokenController, only: [:create]
   end
 
   scope "/api", FleetWeb do
+    pipe_through :api
+
+    resources "/users", UserController, only: [:create]
+  end
+
+  scope "/api", FleetWeb do
     pipe_through [:api, :auth]
+
+    resources "/users", UserController, except: [:create]
+    resources "/locations", LocationController, except: [:show, :update, :delete]
   end
 
   # Other scopes may use custom stacks.
